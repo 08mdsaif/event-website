@@ -51,10 +51,11 @@ export function getAnnouncements() {
 
 export function addAnnouncement(message) {
   const text = message.trim();
-  if (!text) return;
+  if (!text) return false;
   const current = getAnnouncements();
   writeJson(KEYS.announcements, [text, ...current].slice(0, 10));
   notifyDataChanged();
+  return true;
 }
 
 export function getRegistrations() {
@@ -64,5 +65,16 @@ export function getRegistrations() {
 export function addRegistration(registration) {
   const current = getRegistrations();
   writeJson(KEYS.registrations, [registration, ...current]);
+  notifyDataChanged();
+}
+
+export function clearDemoData() {
+  localStorage.removeItem(KEYS.registrations);
+  localStorage.removeItem(KEYS.announcements);
+  notifyDataChanged();
+}
+
+export function seedDemoAnnouncements() {
+  writeJson(KEYS.announcements, defaultAnnouncements);
   notifyDataChanged();
 }

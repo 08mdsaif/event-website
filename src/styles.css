@@ -256,6 +256,21 @@ button {
   margin-bottom: 1rem;
 }
 
+
+.admin-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.2rem 0 1rem;
+}
+
+.secondary-btn {
+  background: #1f3f7c;
+}
+
+.danger-btn {
+  background: #8b2c2c;
+}
+
 .announcement-list {
   margin: 0;
   padding-left: 1.1rem;
@@ -300,6 +315,10 @@ button {
   }
 
   .hero-actions {
+    flex-direction: column;
+  }
+
+  .admin-actions {
     flex-direction: column;
   }
 }

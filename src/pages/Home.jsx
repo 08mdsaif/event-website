@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { EVENT_OPTIONS } from '../lib/events';
 import { getAnnouncements, getRegistrations, subscribeToDataUpdates } from '../lib/storage';
 
 const uniqueIdeas = [
@@ -54,14 +55,24 @@ export default function Home() {
     };
   }, []);
 
+  const topEvent = useMemo(() => {
+    const counts = registrations.reduce((acc, item) => {
+      acc[item.event] = (acc[item.event] || 0) + 1;
+      return acc;
+    }, {});
+
+    const [name, total] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0] || ['Hackathon', 0];
+    return { name, total };
+  }, [registrations]);
+
   const stats = useMemo(
     () => [
       { label: 'Registrations', value: registrations.length || 0 },
       { label: 'Live Announcements', value: announcements.length || 0 },
-      { label: 'Modules Implemented', value: 11 },
-      { label: 'Team Readiness', value: '95%' },
+      { label: 'Events Listed', value: EVENT_OPTIONS.length },
+      { label: 'Top Event', value: `${topEvent.name} (${topEvent.total})` },
     ],
-    [announcements.length, registrations.length]
+    [announcements.length, registrations.length, topEvent.name, topEvent.total]
   );
 
   return (
@@ -102,6 +113,22 @@ export default function Home() {
           <div className="ticker-track">{announcements.join(' • ')}</div>
         </div>
       </section>
+
+      <h2>Featured Modules</h2>
+      <div className="grid cards">
+        <article className="card">
+          <h3>🎟️ Ticket Booking</h3>
+          <p>Generate ticket IDs instantly with payment mode and see recent bookings in Register page.</p>
+        </article>
+        <article className="card">
+          <h3>📊 Live Admin Controls</h3>
+          <p>Organizers can post announcements and manage demo data from one panel.</p>
+        </article>
+        <article className="card">
+          <h3>👤 Student Dashboard</h3>
+          <p>Latest ticket, reward points and event stats update in real-time from shared storage.</p>
+        </article>
+      </div>
 
       <h2>Unique ideas to stand out in viva</h2>
       <div className="grid cards">

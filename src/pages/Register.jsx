@@ -1,22 +1,25 @@
-import { useMemo, useState } from 'react';
-import { addRegistration } from '../lib/storage';
+import { useEffect, useMemo, useState } from 'react';
+import { EVENT_OPTIONS } from '../lib/events';
+import { addRegistration, getRegistrations, subscribeToDataUpdates } from '../lib/storage';
 
-const ticketPrice = {
-  Hackathon: 100,
-  'Dance Battle': 80,
-  'Poster Design': 50,
-  'Coding Contest': 120,
-};
+const ticketPrice = Object.fromEntries(EVENT_OPTIONS.map((event) => [event.name, event.price]));
 
 export default function Register() {
   const [form, setForm] = useState({
     name: '',
     email: '',
-    event: 'Hackathon',
+    event: EVENT_OPTIONS[0].name,
     payment: 'UPI',
   });
   const [ticketId, setTicketId] = useState('');
   const [message, setMessage] = useState('');
+  const [registrations, setRegistrations] = useState(() => getRegistrations());
+
+  useEffect(() => {
+    const syncData = () => setRegistrations(getRegistrations());
+    const unsubscribe = subscribeToDataUpdates(syncData);
+    return unsubscribe;
+  }, []);
 
   const amount = useMemo(() => ticketPrice[form.event] || 0, [form.event]);
 
@@ -60,10 +63,9 @@ export default function Register() {
         <label>
           Event
           <select value={form.event} onChange={handleChange('event')}>
-            <option>Hackathon</option>
-            <option>Dance Battle</option>
-            <option>Poster Design</option>
-            <option>Coding Contest</option>
+            {EVENT_OPTIONS.map((option) => (
+              <option key={option.name}>{option.name}</option>
+            ))}
           </select>
         </label>
         <label>
@@ -96,6 +98,22 @@ export default function Register() {
           <strong>Ticket ID:</strong> {ticketId || 'Generate after registration'}
         </p>
       </div>
+
+      <div className="card">
+        <h3>Recent Registrations</h3>
+        {registrations.length ? (
+          <ul className="announcement-list">
+            {registrations.slice(0, 5).map((item) => (
+              <li key={item.ticketId}>
+                {item.name} — {item.event} ({item.ticketId})
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="note">No registrations yet.</p>
+        )}
+      </div>
+
       <p className="note">Next step: connect this form with Firebase + Razorpay for real payment processing.</p>
     </section>
   );
