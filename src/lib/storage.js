@@ -3,6 +3,8 @@ const KEYS = {
   announcements: 'campusfest_announcements',
 };
 
+const DATA_EVENT = 'campusfest:data-updated';
+
 function readJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -15,6 +17,26 @@ function readJson(key, fallback) {
 
 function writeJson(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function notifyDataChanged() {
+  window.dispatchEvent(new Event(DATA_EVENT));
+}
+
+export function subscribeToDataUpdates(callback) {
+  const handleStorage = (event) => {
+    if (!event.key || Object.values(KEYS).includes(event.key)) {
+      callback();
+    }
+  };
+
+  window.addEventListener(DATA_EVENT, callback);
+  window.addEventListener('storage', handleStorage);
+
+  return () => {
+    window.removeEventListener(DATA_EVENT, callback);
+    window.removeEventListener('storage', handleStorage);
+  };
 }
 
 export const defaultAnnouncements = [
@@ -32,6 +54,7 @@ export function addAnnouncement(message) {
   if (!text) return;
   const current = getAnnouncements();
   writeJson(KEYS.announcements, [text, ...current].slice(0, 10));
+  notifyDataChanged();
 }
 
 export function getRegistrations() {
@@ -41,4 +64,5 @@ export function getRegistrations() {
 export function addRegistration(registration) {
   const current = getRegistrations();
   writeJson(KEYS.registrations, [registration, ...current]);
+  notifyDataChanged();
 }

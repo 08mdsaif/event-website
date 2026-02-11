@@ -1,8 +1,15 @@
-import { useMemo } from 'react';
-import { getRegistrations } from '../lib/storage';
+import { useEffect, useMemo, useState } from 'react';
+import { getRegistrations, subscribeToDataUpdates } from '../lib/storage';
 
 export default function Dashboard() {
-  const registrations = getRegistrations();
+  const [registrations, setRegistrations] = useState(() => getRegistrations());
+
+  useEffect(() => {
+    const syncData = () => setRegistrations(getRegistrations());
+    const unsubscribe = subscribeToDataUpdates(syncData);
+    return unsubscribe;
+  }, []);
+
   const latest = registrations[0];
 
   const stats = useMemo(

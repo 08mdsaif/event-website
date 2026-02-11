@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAnnouncements, getRegistrations } from '../lib/storage';
+import { getAnnouncements, getRegistrations, subscribeToDataUpdates } from '../lib/storage';
 
 const uniqueIdeas = [
   {
@@ -37,13 +37,21 @@ export default function Home() {
   const [countdownText, setCountdownText] = useState(formatCountdown(targetDate - new Date()));
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdownText(formatCountdown(targetDate - new Date()));
+    const syncData = () => {
       setAnnouncements(getAnnouncements());
       setRegistrations(getRegistrations());
+    };
+
+    const timer = setInterval(() => {
+      setCountdownText(formatCountdown(targetDate - new Date()));
     }, 60000);
 
-    return () => clearInterval(timer);
+    const unsubscribe = subscribeToDataUpdates(syncData);
+
+    return () => {
+      clearInterval(timer);
+      unsubscribe();
+    };
   }, []);
 
   const stats = useMemo(

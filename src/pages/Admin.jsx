@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { addAnnouncement, getAnnouncements, getRegistrations } from '../lib/storage';
+import { useEffect, useState } from 'react';
+import { addAnnouncement, getAnnouncements, getRegistrations, subscribeToDataUpdates } from '../lib/storage';
 
 const defaultEvents = [
   { name: 'Hackathon', registrations: 120 },
@@ -10,9 +10,18 @@ export default function Admin() {
   const [events, setEvents] = useState(defaultEvents);
   const [newEvent, setNewEvent] = useState('');
   const [announcement, setAnnouncement] = useState('');
-  const [announcementList, setAnnouncementList] = useState(getAnnouncements());
+  const [announcementList, setAnnouncementList] = useState(() => getAnnouncements());
+  const [registrations, setRegistrations] = useState(() => getRegistrations());
 
-  const registrations = getRegistrations();
+  useEffect(() => {
+    const syncData = () => {
+      setAnnouncementList(getAnnouncements());
+      setRegistrations(getRegistrations());
+    };
+
+    const unsubscribe = subscribeToDataUpdates(syncData);
+    return unsubscribe;
+  }, []);
 
   const addEvent = (event) => {
     event.preventDefault();
@@ -27,7 +36,6 @@ export default function Admin() {
     event.preventDefault();
     addAnnouncement(announcement);
     setAnnouncement('');
-    setAnnouncementList(getAnnouncements());
   };
 
   return (
@@ -78,8 +86,8 @@ export default function Admin() {
       <div className="card">
         <h3>Recent Announcements</h3>
         <ul className="announcement-list">
-          {announcementList.map((item) => (
-            <li key={item}>{item}</li>
+          {announcementList.map((item, index) => (
+            <li key={`${item}-${index}`}>{item}</li>
           ))}
         </ul>
       </div>
