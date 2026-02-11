@@ -18,7 +18,10 @@ a {
 
 .app-shell {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #1c2a4a, #0b1220 50%);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(67, 108, 241, 0.28), transparent 38%),
+    radial-gradient(circle at 80% 10%, rgba(128, 64, 245, 0.22), transparent 30%),
+    #0b1220;
 }
 
 .topbar {
@@ -32,6 +35,7 @@ a {
   z-index: 100;
   background: rgba(11, 18, 32, 0.9);
   backdrop-filter: blur(8px);
+  border-bottom: 1px solid #203153;
 }
 
 .logo {
@@ -73,16 +77,21 @@ nav {
 }
 
 .page h1,
-.page h2 {
+.page h2,
+.page h3 {
   margin-top: 0;
 }
 
 .hero {
   border: 1px solid #284172;
   background: linear-gradient(145deg, rgba(49, 81, 160, 0.35), rgba(49, 81, 160, 0.05));
-  padding: 1.2rem;
+  padding: 1.4rem;
   border-radius: 16px;
   margin-bottom: 1rem;
+}
+
+.hero-glow {
+  box-shadow: 0 0 0 1px rgba(71, 135, 255, 0.22), 0 16px 40px rgba(16, 44, 102, 0.35);
 }
 
 .pill {
@@ -94,15 +103,24 @@ nav {
   font-size: 0.75rem;
 }
 
-.announcement-bar {
+.hero-actions {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  border: 1px solid #2b3f66;
-  border-radius: 12px;
-  padding: 0.5rem 0.8rem;
-  margin-bottom: 1.5rem;
-  background: #111a2f;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.cta {
+  text-decoration: none;
+  background: #2f66e6;
+  color: #fff;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.cta-secondary {
+  background: transparent;
+  border-color: #3f5f94;
 }
 
 .grid {
@@ -119,6 +137,35 @@ nav {
   border-radius: 12px;
   padding: 1rem;
   background: #111a2f;
+}
+
+.feature-highlight {
+  border-color: #5a80d6;
+}
+
+.announcement-strip {
+  margin: 1rem 0 1.2rem;
+}
+
+.ticker-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: ticker 24s linear infinite;
+  color: #cfe0ff;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .filter-row {
@@ -139,6 +186,13 @@ nav {
 .chip-active {
   border-color: #7ba2f7;
   background: #16336e;
+}
+
+.search-box {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+  max-width: 420px;
 }
 
 table {
@@ -202,6 +256,28 @@ button {
   margin-bottom: 1rem;
 }
 
+
+.admin-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.2rem 0 1rem;
+}
+
+.secondary-btn {
+  background: #1f3f7c;
+}
+
+.danger-btn {
+  background: #8b2c2c;
+}
+
+.announcement-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
 .faq-list {
   display: grid;
   gap: 0.6rem;
@@ -236,5 +312,13 @@ button {
 
   .admin-form {
     grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .admin-actions {
+    flex-direction: column;
   }
 }

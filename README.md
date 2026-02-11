@@ -1,21 +1,22 @@
 # CampusFest Minor Project (React)
 
-A complete React starter for a **college event website minor project**.
+A complete React starter for a **college event website minor project** with working frontend interactions.
 
 ## Features included
-- Fast home page with live announcement strip
-- Event schedule + day-wise timetable filter
-- Online registration form + ticket ID generation
-- Ticket booking UI with payment mode (UPI/Card)
-- Student dashboard (profile stats + reminders + certificate section)
-- Admin panel (add event + registration summary)
+- Premium home page with hero, countdown, dynamic stat cards, featured modules, and animated live updates
+- Event schedule with day filter + search
+- Online registration form with ticket generation + recent bookings list
+- Payment mode selector (UPI/Card) and ticket preview
+- Student dashboard that reads real registration data
+- Admin panel with add event, publish announcements, restore defaults, and clear demo data
 - Photo/video gallery page
 - FAQs accordion + contact/help desk + map link
 
 ## Tech stack
 - React + Vite
 - React Router DOM
-- Plain CSS (easy to understand for viva)
+- Plain CSS (easy for viva explanation)
+- localStorage for demo persistence without backend
 
 ## Run locally
 ```bash
@@ -24,7 +25,7 @@ npm run dev
 ```
 
 ## Suggested next upgrades
-- Firebase Auth for student/admin login roles
-- Firestore for registrations, events and announcements
-- Razorpay integration for real payment flow
+- Firebase Auth for student/admin role login
+- Firestore for cloud sync (events/registrations/announcements)
+- Razorpay integration for real payments
 - QR code package for entry pass scanning
